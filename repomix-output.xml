@@ -1,0 +1,959 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+public/
+  icons/
+    icon-144.png
+    icon-192.png
+    icon-48.png
+    icon-512.png
+    icon-72.png
+    icon-96.png
+  manifest.json
+  popup.css
+  popup.html
+src/
+  popup.js
+  worker.js
+.gitignore
+build.mjs
+package.json
+README.md
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="public/manifest.json">
+{
+  "manifest_version": 3,
+  "name": "voice Separator",
+  "version": "1.0.0",
+  "description": "جداسازی محلی صدای خواننده از موسیقی، بدون نیاز به سرویس و بدون آپلود فایل.",
+  "action": {
+    "default_title": "Voice Splitter",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "48": "icons/icon-48.png",
+      "96": "icons/icon-96.png"
+    }
+  },
+  "cross_origin_embedder_policy": {
+    "value": "require-corp"
+  },
+  "cross_origin_opener_policy": {
+    "value": "same-origin"
+  },
+  "host_permissions": ["https://huggingface.co/*", "https://*.hf.co/*"],
+  "icons": {
+    "48": "icons/icon-48.png",
+    "72": "icons/icon-72.png",
+    "96": "icons/icon-96.png",
+    "144": "icons/icon-144.png",
+    "192": "icons/icon-192.png",
+    "512": "icons/icon-512.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com"
+  }
+}
+</file>
+
+<file path="public/popup.css">
+:root {
+  color-scheme: dark;
+  font-family: "Vazirmatn", Tahoma, sans-serif;
+  background: #0b1220;
+  color: #e7eefc;
+  --bg: #0b1220;
+  --card: #131d30;
+  --card-soft: #17243a;
+  --text: #e7eefc;
+  --muted: #91a3bf;
+  --line: rgba(164, 188, 226, 0.16);
+  --accent: #63d6b3;
+  --accent-deep: #1ea983;
+  --danger: #ee8090;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-width: 390px;
+  max-width: 430px;
+  min-height: 560px;
+  background:
+    radial-gradient(circle at 92% 0%, rgba(61, 135, 194, 0.22), transparent 34%),
+    radial-gradient(circle at 6% 24%, rgba(71, 194, 160, 0.1), transparent 30%),
+    var(--bg);
+}
+
+button, input { font: inherit; }
+
+.app-shell { padding: 22px; }
+
+.hero {
+  display: flex;
+  gap: 13px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.brand-mark {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: #071d1a;
+  background: linear-gradient(135deg, var(--accent), #82a9ff);
+  font-size: 25px;
+  font-weight: 800;
+  box-shadow: 0 8px 22px rgba(69, 215, 173, 0.2);
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+
+h1, h2, p { margin-top: 0; }
+h1 { margin-bottom: 4px; font-size: 19px; letter-spacing: -.02em; }
+h2 { margin-bottom: 0; font-size: 16px; }
+.subtitle { margin-bottom: 0; color: var(--muted); font-size: 11px; }
+
+.card {
+  margin-bottom: 13px;
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(19, 29, 48, .88);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, .14);
+}
+
+.file-drop {
+  min-height: 148px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 16px;
+  border: 1px dashed rgba(99, 214, 179, .58);
+  border-radius: 13px;
+  background: linear-gradient(135deg, rgba(99, 214, 179, .08), rgba(87, 121, 198, .08));
+  cursor: pointer;
+  text-align: center;
+  transition: border-color .2s, background .2s, transform .2s;
+}
+
+.file-drop:hover, .file-drop.is-dragging {
+  border-color: var(--accent);
+  background: rgba(99, 214, 179, .14);
+  transform: translateY(-1px);
+}
+
+.file-drop input { display: none; }
+.upload-icon { color: var(--accent); font-size: 25px; font-weight: 300; }
+.drop-title { font-weight: 750; font-size: 13px; }
+.drop-help { color: var(--muted); font-size: 10px; line-height: 1.6; }
+
+.file-meta {
+  margin-top: 11px;
+  padding: 9px 11px;
+  border-radius: 9px;
+  background: var(--card-soft);
+  color: var(--muted);
+  font-size: 11px;
+  word-break: break-word;
+}
+.file-meta strong { color: var(--text); }
+
+.status-row, .section-heading, .result-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.status-row { margin-bottom: 10px; color: var(--muted); font-size: 11px; }
+.status-row strong { color: var(--text); font-size: 11px; }
+.progress-track { height: 7px; overflow: hidden; border-radius: 99px; background: #0b1322; }
+.progress-bar { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent-deep), #7ea6ff); transition: width .25s ease; }
+.status-detail { min-height: 31px; margin: 9px 0 13px; color: var(--muted); font-size: 10px; line-height: 1.55; }
+
+button { border: 0; cursor: pointer; transition: filter .2s, transform .2s, opacity .2s; }
+button:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
+button:disabled { cursor: not-allowed; opacity: .45; }
+.primary-button, .secondary-button { width: 100%; padding: 11px 14px; border-radius: 10px; font-weight: 750; font-size: 12px; }
+.primary-button { color: #061a18; background: linear-gradient(100deg, var(--accent), #86cbff); }
+.secondary-button { margin-top: 8px; color: var(--danger); background: rgba(238, 128, 144, .1); }
+
+.results-card { border-color: rgba(99, 214, 179, .3); }
+.section-heading { margin-bottom: 13px; }
+.quality-pill { padding: 4px 7px; border-radius: 99px; color: var(--accent); background: rgba(99, 214, 179, .12); font-size: 9px; font-weight: 800; }
+.result-list { display: grid; gap: 8px; }
+.result-row { padding: 10px 11px; border-radius: 10px; background: var(--card-soft); }
+.result-row div { display: grid; gap: 3px; }
+.result-row strong { font-size: 11px; }
+.result-row span { color: var(--muted); font-size: 9px; }
+.download-button { padding: 7px 10px; border-radius: 8px; color: #071d1a; background: var(--accent); font-size: 10px; font-weight: 800; }
+.footer-note { padding: 2px 4px 0; color: #71839e; font-size: 9px; line-height: 1.7; text-align: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; }
+}
+</file>
+
+<file path="public/popup.html">
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>جداکننده صدای خواننده</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+  <main class="app-shell">
+    <header class="hero">
+      <div class="brand-mark" aria-hidden="true">♫</div>
+      <div>
+        <p class="eyebrow">پردازش لوکال</p>
+        <h1>جداکنندهٔ صدای خواننده</h1>
+        <p class="subtitle">بدون سرویس، بدون آپلود، مناسب استفاده شخصی</p>
+      </div>
+    </header>
+
+    <section class="card input-card">
+      <label class="file-drop" id="dropZone" for="audioFile">
+        <span class="upload-icon" aria-hidden="true">↑</span>
+        <span class="drop-title">فایل ترانه را انتخاب کنید</span>
+        <span class="drop-help">MP3، WAV، M4A، OGG</span>
+        <input id="audioFile" type="file" accept="audio/*,.mp3,.wav,.m4a,.ogg,.flac" />
+      </label>
+      <div class="file-meta" id="fileMeta" hidden></div>
+    </section>
+
+    <section class="card controls-card">
+      <div class="status-row">
+        <span>وضعیت</span>
+        <strong id="statusText">آماده</strong>
+      </div>
+      <div class="progress-track" aria-label="پیشرفت">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <p class="status-detail" id="statusDetail">مدل جداسازی در اولین اجرا دانلود می‌شود.</p>
+      <button class="primary-button" id="separateButton" disabled>شروع جداسازی</button>
+      <button class="secondary-button" id="cancelButton" hidden>لغو پردازش</button>
+    </section>
+
+    <section class="card results-card" id="resultsCard" hidden>
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">خروجی آماده است</p>
+          <h2>دانلود فایل‌ها</h2>
+        </div>
+        <span class="quality-pill">WAV</span>
+      </div>
+      <div class="result-list">
+        <div class="result-row">
+          <div>
+            <strong>صدای خواننده</strong>
+            <span>Vocal stem</span>
+          </div>
+          <button class="download-button" data-result="vocals">دانلود</button>
+        </div>
+        <div class="result-row">
+          <div>
+            <strong>موسیقی بی‌کلام</strong>
+            <span>Instrumental stem</span>
+          </div>
+          <button class="download-button" data-result="instrumental">دانلود</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer-note">
+      فایل صوتی فقط در مرورگر شما پردازش می‌شود و به سرور ارسال نمی‌گردد.
+    </footer>
+  </main>
+  <script src="popup.js"></script>
+</body>
+
+</html>
+</file>
+
+<file path="src/popup.js">
+const MODEL_SIZE_MB = 172;
+
+const audioFile = document.querySelector("#audioFile");
+const dropZone = document.querySelector("#dropZone");
+const fileMeta = document.querySelector("#fileMeta");
+const separateButton = document.querySelector("#separateButton");
+const cancelButton = document.querySelector("#cancelButton");
+const statusText = document.querySelector("#statusText");
+const statusDetail = document.querySelector("#statusDetail");
+const progressBar = document.querySelector("#progressBar");
+const resultsCard = document.querySelector("#resultsCard");
+
+let selectedFile = null;
+let worker = null;
+let currentResults = null;
+let isProcessing = false;
+
+function setStatus(title, detail, progress = null) {
+  statusText.textContent = title;
+  statusDetail.textContent = detail;
+  if (progress !== null)
+    progressBar.style.width = `${Math.max(0, Math.min(100, progress))}%`;
+}
+
+function formatBytes(bytes) {
+  if (!Number.isFinite(bytes) || bytes <= 0) return "حجم نامشخص";
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} کیلوبایت`;
+  return `${(bytes / 1024 / 1024).toFixed(1)} مگابایت`;
+}
+
+function formatDuration(seconds) {
+  if (!Number.isFinite(seconds)) return "";
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.round(seconds % 60)
+    .toString()
+    .padStart(2, "0");
+  return `${mins}:${secs}`;
+}
+
+async function readAudio(file) {
+  const context = new AudioContext();
+  try {
+    const decoded = await context.decodeAudioData(await file.arrayBuffer());
+    const length = decoded.length;
+    const left = decoded.getChannelData(0).slice();
+    const right =
+      decoded.numberOfChannels > 1
+        ? decoded.getChannelData(1).slice()
+        : left.slice();
+    return { left, right, sampleRate: decoded.sampleRate, length };
+  } finally {
+    await context.close();
+  }
+}
+
+function resampleChannel(input, fromRate, toRate) {
+  if (fromRate === toRate) return input;
+  const outputLength = Math.max(
+    1,
+    Math.round((input.length * toRate) / fromRate),
+  );
+  const output = new Float32Array(outputLength);
+  const ratio = fromRate / toRate;
+  for (let i = 0; i < outputLength; i += 1) {
+    const position = i * ratio;
+    const index = Math.floor(position);
+    const fraction = position - index;
+    const a = input[Math.min(index, input.length - 1)] || 0;
+    const b = input[Math.min(index + 1, input.length - 1)] || a;
+    output[i] = a + (b - a) * fraction;
+  }
+  return output;
+}
+
+function encodeWav(left, right, sampleRate) {
+  const frames = Math.min(left.length, right.length);
+  const buffer = new ArrayBuffer(44 + frames * 4);
+  const view = new DataView(buffer);
+  const writeString = (offset, value) => {
+    for (let i = 0; i < value.length; i += 1)
+      view.setUint8(offset + i, value.charCodeAt(i));
+  };
+  writeString(0, "RIFF");
+  view.setUint32(4, 36 + frames * 4, true);
+  writeString(8, "WAVE");
+  writeString(12, "fmt ");
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, 2, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * 4, true);
+  view.setUint16(32, 4, true);
+  view.setUint16(34, 16, true);
+  writeString(36, "data");
+  view.setUint32(40, frames * 4, true);
+
+  let offset = 44;
+  for (let i = 0; i < frames; i += 1) {
+    const l = Math.max(-1, Math.min(1, left[i] || 0));
+    const r = Math.max(-1, Math.min(1, right[i] || 0));
+    view.setInt16(offset, l < 0 ? l * 0x8000 : l * 0x7fff, true);
+    view.setInt16(offset + 2, r < 0 ? r * 0x8000 : r * 0x7fff, true);
+    offset += 4;
+  }
+  return new Blob([buffer], { type: "audio/wav" });
+}
+
+function downloadBlob(blob, name) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = name;
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
+
+function baseName(name) {
+  return (
+    name.replace(/\.[^/.]+$/, "").replace(/[\\/:*?"<>|]+/g, "_") || "track"
+  );
+}
+
+function selectFile(file) {
+  if (
+    !file ||
+    (!file.type.startsWith("audio/") &&
+      !/\.(mp3|wav|m4a|ogg|flac)$/i.test(file.name))
+  ) {
+    setStatus("فایل نامعتبر", "لطفاً یک فایل صوتی قابل‌پخش انتخاب کنید.", 0);
+    return;
+  }
+  selectedFile = file;
+  resultsCard.hidden = true;
+  currentResults = null;
+  fileMeta.hidden = false;
+  fileMeta.innerHTML = `<strong>${file.name}</strong> · ${formatBytes(file.size)}`;
+  separateButton.disabled = false;
+  setStatus("آماده", "فایل انتخاب شد. برای شروع روی دکمهٔ زیر بزنید.", 0);
+}
+
+function terminateWorker() {
+  if (worker) worker.terminate();
+  worker = null;
+}
+
+function handleWorkerMessage(event) {
+  const data = event.data || {};
+  if (data.type === "model-progress") {
+    const loaded = data.loaded || 0;
+    const total = data.total || MODEL_SIZE_MB * 1024 * 1024;
+    setStatus(
+      "در حال دانلود مدل",
+      `${formatBytes(loaded)} از حدود ${formatBytes(total)} · این مرحله فقط بار اول انجام می‌شود.`,
+      (loaded / total) * 100,
+    );
+    return;
+  }
+  if (data.type === "model-cached") {
+    setStatus("مدل آماده است", "مدل از حافظهٔ محلی خوانده شد.", 100);
+    return;
+  }
+  if (data.type === "status") {
+    setStatus("در حال آماده‌سازی", data.message, 100);
+    return;
+  }
+  if (data.type === "log") {
+    setStatus("در حال پردازش", data.message, null);
+    return;
+  }
+  if (data.type === "progress") {
+    setStatus(
+      "در حال جداسازی",
+      `قطعهٔ ${data.currentSegment} از ${data.totalSegments}`,
+      data.progress * 100,
+    );
+    return;
+  }
+  if (data.type === "done") {
+    currentResults = {
+      sampleRate: data.sampleRate,
+      vocalsLeft: new Float32Array(data.vocalsLeft),
+      vocalsRight: new Float32Array(data.vocalsRight),
+      instrumentalLeft: new Float32Array(data.instrumentalLeft),
+      instrumentalRight: new Float32Array(data.instrumentalRight),
+    };
+    isProcessing = false;
+    separateButton.disabled = false;
+    cancelButton.hidden = true;
+    resultsCard.hidden = false;
+    setStatus("تمام شد", "دو خروجی آمادهٔ دانلود هستند.", 100);
+    terminateWorker();
+    return;
+  }
+  if (data.type === "error") {
+    isProcessing = false;
+    separateButton.disabled = !selectedFile;
+    cancelButton.hidden = true;
+    setStatus("خطا", data.message || "پردازش ناموفق بود.", 0);
+    terminateWorker();
+  }
+}
+
+async function startSeparation() {
+  if (!selectedFile || isProcessing) return;
+  isProcessing = true;
+  separateButton.disabled = true;
+  cancelButton.hidden = false;
+  resultsCard.hidden = true;
+  setStatus(
+    "در حال خواندن فایل",
+    "فایل صوتی فقط در همین مرورگر خوانده می‌شود…",
+    2,
+  );
+
+  try {
+    const decoded = await readAudio(selectedFile);
+    const left = resampleChannel(decoded.left, decoded.sampleRate, 44100);
+    const right = resampleChannel(decoded.right, decoded.sampleRate, 44100);
+    const duration = left.length / 44100;
+    setStatus(
+      "در حال آماده‌سازی",
+      `مدت زمان فایل: ${formatDuration(duration)} · مدل روی دستگاه شما اجرا می‌شود.`,
+      5,
+    );
+
+    worker = new Worker("worker.js");
+    worker.onmessage = handleWorkerMessage;
+    worker.onerror = (error) => {
+      handleWorkerMessage({
+        data: { type: "error", message: error.message || "خطای worker" },
+      });
+    };
+    worker.postMessage(
+      { type: "separate", left: left.buffer, right: right.buffer },
+      [left.buffer, right.buffer],
+    );
+  } catch (error) {
+    isProcessing = false;
+    separateButton.disabled = false;
+    cancelButton.hidden = true;
+    setStatus(
+      "خطا در خواندن فایل",
+      error.message || "فرمت فایل پشتیبانی نمی‌شود.",
+      0,
+    );
+    terminateWorker();
+  }
+}
+
+function cancelSeparation() {
+  if (!isProcessing) return;
+  isProcessing = false;
+  terminateWorker();
+  separateButton.disabled = !selectedFile;
+  cancelButton.hidden = true;
+  setStatus("لغو شد", "می‌توانید دوباره پردازش را شروع کنید.", 0);
+}
+
+function downloadResult(kind) {
+  if (!currentResults || !selectedFile) return;
+  const name = baseName(selectedFile.name);
+  if (kind === "vocals") {
+    downloadBlob(
+      encodeWav(
+        currentResults.vocalsLeft,
+        currentResults.vocalsRight,
+        currentResults.sampleRate,
+      ),
+      `${name}_vocals.wav`,
+    );
+  } else {
+    downloadBlob(
+      encodeWav(
+        currentResults.instrumentalLeft,
+        currentResults.instrumentalRight,
+        currentResults.sampleRate,
+      ),
+      `${name}_instrumental.wav`,
+    );
+  }
+}
+
+audioFile.addEventListener("change", (event) =>
+  selectFile(event.target.files?.[0]),
+);
+separateButton.addEventListener("click", startSeparation);
+cancelButton.addEventListener("click", cancelSeparation);
+for (const button of document.querySelectorAll(".download-button")) {
+  button.addEventListener("click", () => downloadResult(button.dataset.result));
+}
+
+for (const eventName of ["dragenter", "dragover"]) {
+  dropZone.addEventListener(eventName, (event) => {
+    event.preventDefault();
+    dropZone.classList.add("is-dragging");
+  });
+}
+for (const eventName of ["dragleave", "drop"]) {
+  dropZone.addEventListener(eventName, (event) => {
+    event.preventDefault();
+    dropZone.classList.remove("is-dragging");
+  });
+}
+dropZone.addEventListener("drop", (event) =>
+  selectFile(event.dataTransfer.files?.[0]),
+);
+</file>
+
+<file path="src/worker.js">
+import * as ort from "onnxruntime-web/webgpu";
+import { DemucsProcessor, CONSTANTS } from "demucs-web";
+
+const MODEL_URL = CONSTANTS.DEFAULT_MODEL_URL;
+const MODEL_CACHE_KEY = "htdemucs_embedded-v1";
+
+ort.env.wasm.wasmPaths = new URL("ort/", self.location.href).href;
+ort.env.wasm.numThreads = 1;
+ort.env.wasm.proxy = false;
+
+let processor = null;
+let loadingPromise = null;
+
+function send(message, transfer = []) {
+  self.postMessage(message, transfer);
+}
+
+function openModelDb() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open("vocal-splitter-cache", 1);
+    request.onupgradeneeded = () => request.result.createObjectStore("models");
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function getCachedModel() {
+  try {
+    const db = await openModelDb();
+    return await new Promise((resolve, reject) => {
+      const tx = db.transaction("models", "readonly");
+      const request = tx.objectStore("models").get(MODEL_CACHE_KEY);
+      request.onsuccess = () => resolve(request.result || null);
+      request.onerror = () => reject(request.error);
+    });
+  } catch {
+    return null;
+  }
+}
+
+async function cacheModel(buffer) {
+  try {
+    const db = await openModelDb();
+    await new Promise((resolve, reject) => {
+      const tx = db.transaction("models", "readwrite");
+      tx.objectStore("models").put(buffer, MODEL_CACHE_KEY);
+      tx.oncomplete = resolve;
+      tx.onerror = () => reject(tx.error);
+    });
+  } catch {
+    // The model remains usable in memory even if browser storage is unavailable.
+  }
+}
+
+async function fetchModelBuffer() {
+  const cached = await getCachedModel();
+  if (cached instanceof ArrayBuffer) {
+    send({ type: "model-cached", bytes: cached.byteLength });
+    return cached;
+  }
+
+  const response = await fetch(MODEL_URL);
+  if (!response.ok)
+    throw new Error(`دانلود مدل ناموفق بود: HTTP ${response.status}`);
+
+  const total = Number(response.headers.get("content-length")) || 0;
+  if (!response.body) {
+    const buffer = await response.arrayBuffer();
+    send({
+      type: "model-progress",
+      loaded: buffer.byteLength,
+      total: total || buffer.byteLength,
+    });
+    await cacheModel(buffer);
+    return buffer;
+  }
+
+  const reader = response.body.getReader();
+  const chunks = [];
+  let loaded = 0;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(value);
+    loaded += value.byteLength;
+    send({ type: "model-progress", loaded, total });
+  }
+
+  const combined = new Uint8Array(loaded);
+  let offset = 0;
+  for (const chunk of chunks) {
+    combined.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  const buffer = combined.buffer;
+  await cacheModel(buffer);
+  return buffer;
+}
+
+async function ensureModel() {
+  if (processor) return processor;
+  if (loadingPromise) return loadingPromise;
+
+  loadingPromise = (async () => {
+    processor = new DemucsProcessor({
+      ort,
+      modelPath: MODEL_URL,
+      sessionOptions: {
+        executionProviders: ["webgpu", "wasm"],
+        graphOptimizationLevel: "basic",
+        enableCpuMemArena: false,
+        enableMemPattern: false,
+      },
+      onProgress: ({ progress, currentSegment, totalSegments }) => {
+        send({ type: "progress", progress, currentSegment, totalSegments });
+      },
+      onLog: (phase, message) => {
+        send({ type: "log", phase, message });
+      },
+    });
+
+    const modelBuffer = await fetchModelBuffer();
+    send({ type: "status", message: "مدل در حال آماده‌سازی است…" });
+    await processor.loadModel(modelBuffer);
+    return processor;
+  })();
+
+  try {
+    return await loadingPromise;
+  } finally {
+    loadingPromise = null;
+  }
+}
+
+function addInto(target, source) {
+  for (let i = 0; i < target.length; i += 1) target[i] += source[i];
+}
+
+function makeInstrumental(result, length) {
+  const left = new Float32Array(length);
+  const right = new Float32Array(length);
+  addInto(left, result.drums.left);
+  addInto(left, result.bass.left);
+  addInto(left, result.other.left);
+  addInto(right, result.drums.right);
+  addInto(right, result.bass.right);
+  addInto(right, result.other.right);
+  return { left, right };
+}
+
+self.onmessage = async (event) => {
+  const data = event.data || {};
+  if (data.type !== "separate") return;
+
+  try {
+    const left = new Float32Array(data.left);
+    const right = new Float32Array(data.right);
+    const model = await ensureModel();
+
+    send({ type: "status", message: "در حال جداسازی قطعه‌های صوتی…" });
+    const result = await model.separate(left, right);
+    const instrumental = makeInstrumental(result, left.length);
+
+    send(
+      {
+        type: "done",
+        sampleRate: CONSTANTS.SAMPLE_RATE,
+        vocalsLeft: result.vocals.left.buffer,
+        vocalsRight: result.vocals.right.buffer,
+        instrumentalLeft: instrumental.left.buffer,
+        instrumentalRight: instrumental.right.buffer,
+      },
+      [
+        result.vocals.left.buffer,
+        result.vocals.right.buffer,
+        instrumental.left.buffer,
+        instrumental.right.buffer,
+      ],
+    );
+  } catch (error) {
+    send({
+      type: "error",
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : "",
+    });
+  }
+};
+</file>
+
+<file path=".gitignore">
+node_modules/
+dist/
+*.zip
+*.wav
+*.mp3
+.DS_Store
+Thumbs.db
+</file>
+
+<file path="build.mjs">
+import { build } from "esbuild";
+import { cp, mkdir, rm } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const root = path.dirname(fileURLToPath(import.meta.url));
+const dist = path.join(root, "dist");
+const ortDist = path.join(root, "node_modules/onnxruntime-web/dist");
+
+await rm(dist, { recursive: true, force: true });
+await mkdir(dist, { recursive: true });
+await cp(path.join(root, "public"), dist, { recursive: true });
+await mkdir(path.join(dist, "ort"), { recursive: true });
+
+for (const file of [
+  "ort-wasm-simd-threaded.mjs",
+  "ort-wasm-simd-threaded.wasm",
+  "ort-wasm-simd-threaded.jsep.mjs",
+  "ort-wasm-simd-threaded.jsep.wasm",
+  "ort-wasm-simd-threaded.asyncify.mjs",
+  "ort-wasm-simd-threaded.asyncify.wasm",
+]) {
+  await cp(path.join(ortDist, file), path.join(dist, "ort", file));
+}
+
+await build({
+  entryPoints: [
+    path.join(root, "src/popup.js"),
+    path.join(root, "src/worker.js"),
+  ],
+  outdir: dist,
+  bundle: true,
+  format: "iife",
+  target: "es2022",
+  platform: "browser",
+  minify: false,
+  sourcemap: false,
+  legalComments: "none",
+  define: { "process.env.NODE_ENV": '"production"' },
+});
+
+console.log(`Built extension in ${dist}`);
+</file>
+
+<file path="package.json">
+{
+  "name": "voice-separator",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "check": "node --check src/popup.js"
+  },
+  "dependencies": {
+    "demucs-web": "^1.0.2",
+    "onnxruntime-web": "^1.20.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
+}
+</file>
+
+<file path="README.md">
+# راهنمای فارسی — جداکننده صدای خواننده (Vocal Splitter Local)
+
+افزونه کروم برای جداسازی صدای خواننده از موزیک، **کاملاً داخل مرورگر شما**. بدون API پولی، بدون آپلود فایل.
+
+## این افزونه چه می‌کند؟
+
+فایل آهنگ را انتخاب می‌کنید، مدل هوش مصنوعی HTDemucs داخل خود کروم اجرا می‌شود و دو فایل WAV تحویل می‌دهد:
+
+- `نام‌آهنگ_vocals.wav` → فقط صدای خواننده
+- `نام‌آهنگ_instrumental.wav` → موزیک بی‌کلام (سازها)
+
+## نصب قدم‌به‌قدم 
+
+### ساخت از سورس
+
+```bash
+npm install
+npm run build
+```
+
+بعد مثل بالا پوشه `dist` را با Load unpacked نصب کنید.
+
+## استفاده
+
+1. روی آیکون افزونه کلیک کنید.
+2. فایل آهنگ را بکشید و رها کنید (یا انتخاب کنید): MP3، WAV، M4A، OGG، FLAC.
+3. دکمه **شروع جداسازی** را بزنید.
+4. صبر کنید تا پیام **تمام شد** بیاید، بعد هر دو فایل را دانلود کنید.
+
+> ⚠️ در اجرای اول، مدل ~۱۷۲ مگابایتی از Hugging Face دانلود می‌شود و در حافظه مرورگر (IndexedDB) کش می‌شود. پس اجرای اول اینترنت می‌خواهد، اجراهای بعدی آفلاین هم کار می‌کند.
+>
+> ⚠️ تا پایان پردازش، پنجره popup را نبندید. بستن آن پردازش را متوقف می‌کند.
+
+## اگر به مشکل خوردید
+
+| مشکل | راه‌حل |
+|---|---|
+| دانلود مدل گیر کرد | اینترنت را چک کنید و popup را باز نگه دارید، دوباره تلاش کنید |
+| پردازش خیلی طول کشید | طبیعی است؛ فایل طولانی روی CPU چند دقیقه طول می‌کشد. فایل کوتاه‌تر را تست کنید |
+| خطای فرمت فایل | فایل را اول در کروم پخش کنید؛ اگر پخش نشد، با Audacity به WAV تبدیل کنید |
+| کیفیت جداسازی کامل نیست | روی آهنگ زنده، هم‌خوانی یا افکت سنگین مدل محدودیت دارد |
+
+## حریم خصوصی
+
+فایل صوتی شما به هیچ سروری ارسال نمی‌شود. فقط مدل عمومی از Hugging Face دانلود می‌شود. افزونه به history، کوکی یا تب‌ها دسترسی ندارد.
+
+## تبدیل WAV به MP3 (اختیاری)
+
+```bash
+ffmpeg -i input_vocals.wav -codec:a libmp3lame -qscale:a 2 output_vocals.mp3
+```
+</file>
+
+</files>

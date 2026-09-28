@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "voice Separator",
+  "version": "1.0.0",
+  "description": "جداسازی محلی صدای خواننده از موسیقی، بدون نیاز به سرویس و بدون آپلود فایل.",
+  "action": {
+    "default_title": "Voice Splitter",
+    "default_icon": {
+      "48": "icons/icon-48.png",
+      "96": "icons/icon-96.png"
+    }
+  },
+  "permissions": [
+    "sidePanel"
+  ],
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "cross_origin_embedder_policy": {
+    "value": "require-corp"
+  },
+  "cross_origin_opener_policy": {
+    "value": "same-origin"
+  },
+  "host_permissions": ["https://huggingface.co/*", "https://*.hf.co/*"],
+  "icons": {
+    "48": "icons/icon-48.png",
+    "72": "icons/icon-72.png",
+    "96": "icons/icon-96.png",
+    "144": "icons/icon-144.png",
+    "192": "icons/icon-192.png",
+    "512": "icons/icon-512.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com"
+  }
+}
